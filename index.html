@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Wave Music Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            /* CHANGED COLORS BELOW */
+            --bg-color: #0f172a;       /* Deep Dark Blue */
+            --text-main: #ffffff;      /* Pure White text */
+            --text-muted: #94a3b8;     /* Slate Gray text */
+            --accent-blue: #3b82f6;
+            --track-hover: #1e293b;    /* Slightly lighter for hover effect */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color); /* Applied the dark background */
+            color: var(--text-main);           /* Applied white text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .player-container {
+            display: flex;
+            gap: 60px;
+            max-width: 1000px;
+            width: 90%;
+            padding: 20px;
+        }
+
+        /* Left Side: Current Song */
+        .now-playing {
+            flex: 1.2;
+        }
+
+        .main-cover {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            
+            background: linear-gradient(135deg, #e96d88 0%, #8b5cf6 100%);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); /* Stronger shadow for dark mode */
+            transition: transform 0.3s ease;
+        }
+
+        .main-cover:hover {
+            transform: scale(1.02);
+        }
+
+        .song-info {
+            margin-top: 24px;
+        }
+
+        .song-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .artist-name {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin: 4px 0;
+        }
+
+        .album-name {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .progress-container {
+            margin-top: 30px;
+        }
+
+        .time-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding: 0 10px;
+        }
+
+        .btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-main); /* White icons */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn:hover { opacity: 0.7; }
+        .btn:active { transform: scale(0.9); }
+
+        .play-pause {
+            background: #ffffff; /* White button for contrast */
+            color: #000000;      /* Dark icon inside */
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+        }
+
+        .repeat-btn {
+            color: rgb(226, 223, 223);
+            background-color: var(--accent-blue);
+            
+            padding: 6px;
+            border-radius: 6px;
+            
+        }
+
+        /* Right Side: Playlist */
+        .playlist {
+            flex: 1;
+        }
+
+        .up-next-header {
+            margin-bottom: 20px;
+        }
+
+        .up-next-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .up-next-header span {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .track-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .track-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .track-item:hover {
+            background-color: var(--track-hover); /* Dark hover effect */
+        }
+
+        .thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+
+        .track-details {
+            flex-grow: 1;
+        }
+
+        .track-name {
+            font-weight: 600;
+            font-size: 15px;
+            display: block;
+        }
+
+        .track-artist {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .track-duration {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .album-footer {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="player-container">
+    <div class="now-playing">
+        <div class="main-cover"></div>
+        <div class="song-info">
+            <h1 class="song-title">Midnight Dreams</h1>
+            <p class="artist-name">Aurora Wave</p>
+            <p class="album-name">Ethereal Nights</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="time-labels">
+                <span>1:24</span>
+                <span>4:02</span>
+            </div>
+            <div style="height: 4px; background: #334155; border-radius: 2px;">
+                <div style="width: 35%; height: 100%; background: #3b82f6; border-radius: 2px;"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn"><i data-lucide="rotate-ccw" size="20"></i></button>
+            <button class="btn"><i data-lucide="skip-back" fill="currentColor"></i></button>
+            <button class="btn play-pause"><i data-lucide="play" fill="currentColor"></i></button>
+            <button class="btn"><i data-lucide="skip-forward" fill="currentColor"></i></button>
+            <button class="btn repeat-btn"><i data-lucide="repeat" size="18"></i></button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <i data-lucide="volume-2" style="color: #3477e4;"></i>
+            <p>&#128151</p>                                 
+        </div>
+    </div>
+
+    <div class="playlist">
+        <div class="up-next-header">
+            <h2>Up Next</h2>
+            <span>6 songs</span>
+        </div>
+
+        <div class="track-list">
+            <div class="track-item">
+                <div class="thumb" style="background: linear-gradient(#e96d88, #8b5cf6);"></div>
+                <div class="track-details">
+                    <span class="track-name">Midnight Dreams</span>
+                    <span class="track-artist">Aurora Wave</span>
+                </div>
+                <span class="track-duration">4:02</span>
+            </div>
+            <div class="track-item">
+                <div class="thumb" style="background: linear-gradient(#fcd34d, #f59e0b);"></div>
+                <div class="track-details">
+                    <span class="track-name">Neon Lights</span>
+                    <span class="track-artist">Michael Stanley</span>
+                </div>
+                <span class="track-duration">3:45</span>
+            </div>
+            <div class="track-item">
+                <div class="thumb" style="background: linear-gradient(#34d399, #059669);"></div>
+                <div class="track-details">
+                    <span class="track-name">Starfall</span>
+                    <span class="track-artist">Irene Cara </span>
+                </div>
+                <span class="track-duration">5:12</span>
+            </div>
+            <div class="track-item">
+                <div class="thumb" style="background: linear-gradient(#22d3ee, #1e3a8a);"></div>
+                <div class="track-details">
+                    <span class="track-name">Ocean Waves</span>
+                    <span class="track-artist">Lewis</span>
+                </div>
+                <span class="track-duration">3:28</span>
+            </div>
+            <div class="track-item">
+                <div class="thumb" style="background: linear-gradient(#f87171, #fbbf24);"></div>
+                <div class="track-details">
+                    <span class="track-name">City Nights</span>
+                    <span class="track-artist">Aurora Wave</span>
+                </div>
+                <span class="track-duration">4:15</span>
+            </div>
+            <div class="track-item">
+                <div class="thumb" style="background: linear-gradient(#6365f5, #4338ca);"></div>
+                <div class="track-details">
+                    <span class="track-name">Velvet Sky</span>
+                    <span class="track-artist">Ryan Beatty</span>
+                </div>
+                <span class="track-duration">3:55</span>
+            </div>
+        </div>
+
+        <div class="album-footer">
+            <i data-lucide="music" size="18" style="color: #4c4ff1;"></i>
+            <span>Ethereal Nights · 2024</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+
+</body>
+</html>
